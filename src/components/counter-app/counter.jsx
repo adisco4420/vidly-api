@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 
 class Counter extends Component {
-    state = { count: 0 }
     formatCount(count) {
         return  count === 0 ?  'Zero' : count
     }
     getBadgeColor(count) {
         return count === 0 ? `badge-warning`: 'badge-info'
     }
-    handleCount = () => {
-        this.setState({count: this.state.count + 1})
-    }
     render() { 
         return (
-            <div className="container p-4">
-                <span className={`badge  mr-3 ${this.getBadgeColor(this.state.count)}`}>{this.formatCount(this.state.count)}</span>
-                <button onClick={this.handleCount} className="btn btn-secondary btn-sm">Increment</button>
+            <div className="p-2">
+                <span className={`badge  mr-3 ${this.getBadgeColor(this.props.count.value)}`}>{this.formatCount(this.props.count.value)}</span>
+                <button onClick={() => this.props.onCount(this.props.count)} className="btn btn-secondary btn-sm mr-2">+</button>
+                <button disabled={this.props.count.value === 0} onClick={() => this.props.onDesc(this.props.count)} className="btn btn-secondary btn-sm">-</button>
+                <button onClick={() => this.props.onDelete(this.props.count.id)} className="btn btn-danger btn-sm ml-2">Delete</button>
             </div>
           );
     }

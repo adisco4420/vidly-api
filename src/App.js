@@ -1,11 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Counter from './components/counter-app/counter';
+import Counters from './components/counter-app/counters';
 
 function App() {
   return (
-    <Counter />
+    <Counters />
   );
 }
 
