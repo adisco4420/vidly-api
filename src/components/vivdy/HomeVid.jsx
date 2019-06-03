@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { getMovies, deleteMovie } from "../../services/fakeMovieService";
 import LikeCount from "../common/Likes";
-import SortTable from "../common/sortTable";
+import FilterTable from "../common/filterTable";
 import Pagination from "../common/pagination";
 
 class HomeVid extends Component {
@@ -9,86 +9,85 @@ class HomeVid extends Component {
     allMovies: getMovies(),
     filteredMovie: getMovies(),
     pageSize: 4,
-    filterBy: null,
-    sortBy: false,
-    sortValue: null
+    filterBy: 'allgenre',
+    isSorted: false,
+    sortBy: null
   };
   handleDelete = id => {
     deleteMovie(id);
-    this.setState({ allMovies: getMovies() });
+    this.setState({ filteredMovie: getMovies() });
   };
-  handelPageChange =(page) => {
-      console.log('page change', page);
-      
+  handelPageChange = (page) => {
+    console.log('page change', page);
+
   }
-  handleSort = genre => {
+  handleFilter = genre => {
     let movies;
     if (genre === "allgenre") {
       movies = this.state.allMovies
     } else {
       movies = this.state.allMovies.filter(movie => movie.genre.name === genre);
     }
-    this.setState({ filteredMovie: movies , filterBy: genre});
+    this.setState({ filteredMovie: movies, filterBy: genre });
   };
-  handleFilter = (value) => {
-      const movies = this.state.filteredMovie;
-    movies.sort(function (a, b) {
-        let ax = a[value];
-        let bx = b[value]
-        if (value === 'genre') {
-            ax  = a[value]['name'];
-             bx = b[value]['name']
-        }
-        if (ax > bx) {
-            return -1;
-          } if (ax < bx) {
-            return 1;
-          }
-          return 0;
-    })
-    this.setState({filteredMovie: movies, sortBy: true, sortValue: value})
-
-
-  }
-  handleDecSort = (value) => {    
+  handleSort = (value) => {
     const movies = this.state.filteredMovie;
-  movies.sort(function (a, b) {
+    movies.sort(function (a, b) {
       let ax = a[value];
       let bx = b[value]
       if (value === 'genre') {
-          ax  = a[value]['name'];
-           bx = b[value]['name']
+        ax = a[value]['name'];
+        bx = b[value]['name']
       }
       if (ax > bx) {
-          return 1;
-        } if (ax < bx) {
-          return -1;
-        }
-        return 0;
-  })
-  this.setState({filteredMovie: movies, sortBy: false, sortValue: value})
-}
+        return -1;
+      } if (ax < bx) {
+        return 1;
+      }
+      return 0;
+    })
+    this.setState({ filteredMovie: movies, isSorted: true, sortBy: value })
+
+
+  }
+  handleDecSort = (value) => {
+    const movies = this.state.filteredMovie;
+    movies.sort(function (a, b) {
+      let ax = a[value];
+      let bx = b[value]
+      if (value === 'genre') {
+        ax = a[value]['name'];
+        bx = b[value]['name']
+      }
+      if (ax > bx) {
+        return 1;
+      } if (ax < bx) {
+        return -1;
+      }
+      return 0;
+    })
+    this.setState({ filteredMovie: movies, isSorted: false, sortBy: value })
+  }
   render() {
-      const count = this.state.filteredMovie.length;
+    const count = this.state.filteredMovie.length;
     return (
       <div className="container p-2">
         <div className="row">
           <div className="col-md-4">
-            <SortTable filterBy={this.state.filterBy} onSort={this.handleSort} />
+            <FilterTable filterBy={this.state.filterBy} onFilter={this.handleFilter} />
           </div>
           <div className="col-md-8">
             <p>Showing {count} movies in the database</p>
             <DisplayMovies
-              onFilter={this.handleFilter}
+              onSort={this.handleSort}
               onDecSort={this.handleDecSort}
-              sortValue={this.state.sortValue}
               onLike={this.handeleLike}
-              sortBy={this.state.sortBy}
-              allMovies={this.state.filteredMovie}
+              data={this.state}
               handleDelete={this.handleDelete}
-            />         <Pagination itemCount={count} pageSize={this.state.pageSize} onPageChange={this.handelPageChange}  />
+            />         
+            <Pagination itemCount={count} pageSize={this.state.pageSize} onPageChange={this.handelPageChange} />
           </div>
- 
+
         </div>
       </div>
     );
@@ -101,11 +100,12 @@ class HomeVid extends Component {
     this.setState({ filteredMovie: movies });
   };
 }
-const DisplayMovies = ({ allMovies, handleDelete, onLike, onFilter , sortBy, onDecSort, sortValue}) => {
-  console.log(sortValue);
-  
-  const Headers = [{title: "Title", value: 'title'}, {title: 'Genre', value: 'genre'},
-                    {title: "Stock", value: 'numberInStock'},{title: "Rate", value: 'dailyRentalRate'}];
+const DisplayMovies = (props) => {
+  const { handleDelete, onLike, onSort, onDecSort } = props
+  const { sortBy, isSorted, allMovies } = props.data;
+  const Headers = [{ title: "Title", value: 'title' }, { title: 'Genre', value: 'genre' },
+  { title: "Stock", value: 'numberInStock' }, { title: "Rate", value: 'dailyRentalRate' }];
+
   return (
     <React.Fragment>
       {!allMovies.length ? (
@@ -114,46 +114,46 @@ const DisplayMovies = ({ allMovies, handleDelete, onLike, onFilter , sortBy, onD
           <h6>No Movies</h6>
         </div>
       ) : (
-        <table className="table">
-          <thead>
-            <tr>
-              {Headers.map((header, index) => (
-                <th  key={index} onClick={() => {!sortBy ? onFilter(header.value) : onDecSort(header.value) } } scope="col">
-                  {header.title} <span className={!sortBy && header.value === sortValue ? 'fas fa-arrow-up': 'fas fa-arrow-down'}></span>
-                </th>
-              ))}
+          <table className="table">
+            <thead>
+              <tr>
+                {Headers.map((header, index) => (
+                  <th key={index} onClick={() => { !isSorted ? onSort(header.value) : onDecSort(header.value) }} scope="col">
+                    {header.title} <span className={!isSorted && header.value === sortBy ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}></span>
+                  </th>
+                ))}
 
-              <th />
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allMovies.slice(3, allMovies.length).map(movie => (
-              <tr key={movie._id}>
-                <td>{movie.title}</td>
-                <td>{movie.genre.name}</td>
-                <td>{movie.numberInStock}</td>
-                <td>{movie.dailyRentalRate}</td>
-                <td>
-                  <LikeCount
-                    movie={movie}
-                    liked={movie.liked}
-                    onLike={onLike}
-                  />
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDelete(movie._id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
+                <th />
+                <th scope="col">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {allMovies.map(movie => (
+                <tr key={movie._id}>
+                  <td>{movie.title}</td>
+                  <td>{movie.genre.name}</td>
+                  <td>{movie.numberInStock}</td>
+                  <td>{movie.dailyRentalRate}</td>
+                  <td>
+                    <LikeCount
+                      movie={movie}
+                      liked={movie.liked}
+                      onLike={onLike}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleDelete(movie._id)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Delete
+                  </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
     </React.Fragment>
   );
 };
