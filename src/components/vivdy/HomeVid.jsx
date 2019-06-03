@@ -30,6 +30,14 @@ class HomeVid extends Component {
     }
     this.setState({ filteredMovie: movies, filterBy: genre });
   };
+  handleSearch = e => {
+    let { value } = e.target;
+    value = value.toLowerCase();
+    const movies = this.state.allMovies.filter(val => val.title.toLowerCase().includes(value) || 
+    val.genre.name.toLowerCase().includes(value) || val.dailyRentalRate.toString().toLowerCase().includes(value)
+    || val.numberInStock.toString().toLowerCase().includes(value))
+    this.setState({filteredMovie: movies})
+  }
   handleSort = (value) => {
     const movies = this.state.filteredMovie;
     movies.sort(function (a, b) {
@@ -77,13 +85,18 @@ class HomeVid extends Component {
             <FilterTable filterBy={this.state.filterBy} onFilter={this.handleFilter} />
           </div>
           <div className="col-md-8">
-            <p>Showing {count} movies in the database</p>
+            <div className="row m-3">
+              <div className="col-md-6"> <p>Showing {count} movies in the database</p></div>
+              <div className="col-md-6 float-right">
+                <input type="search" onChange={this.handleSearch} className="form-control" placeholder="search"/>
+              </div>
+            </div>
             <DisplayMovies
               onSort={this.handleSort}
               onDecSort={this.handleDecSort}
               onLike={this.handeleLike}
               data={this.state}
-              handleDelete={this.handleDelete}
+              onDelete={this.handleDelete}
             />         
             <Pagination itemCount={count} pageSize={this.state.pageSize} onPageChange={this.handelPageChange} />
           </div>
@@ -101,14 +114,14 @@ class HomeVid extends Component {
   };
 }
 const DisplayMovies = (props) => {
-  const { handleDelete, onLike, onSort, onDecSort } = props
-  const { sortBy, isSorted, allMovies } = props.data;
+  const { onDelete, onLike, onSort, onDecSort } = props
+  const { sortBy, isSorted, filteredMovie } = props.data;
   const Headers = [{ title: "Title", value: 'title' }, { title: 'Genre', value: 'genre' },
   { title: "Stock", value: 'numberInStock' }, { title: "Rate", value: 'dailyRentalRate' }];
 
   return (
     <React.Fragment>
-      {!allMovies.length ? (
+      {!filteredMovie.length ? (
         <div className="text-center p-4">
           <i className="fas fa-film fa-5x" />
           <h6>No Movies</h6>
@@ -128,7 +141,7 @@ const DisplayMovies = (props) => {
               </tr>
             </thead>
             <tbody>
-              {allMovies.map(movie => (
+              {filteredMovie.map(movie => (
                 <tr key={movie._id}>
                   <td>{movie.title}</td>
                   <td>{movie.genre.name}</td>
@@ -143,7 +156,7 @@ const DisplayMovies = (props) => {
                   </td>
                   <td>
                     <button
-                      onClick={() => handleDelete(movie._id)}
+                      onClick={() => onDelete(movie._id)}
                       className="btn btn-danger btn-sm"
                     >
                       Delete
