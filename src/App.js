@@ -7,7 +7,8 @@ import Products from './components/routing/products';
 import Navbar from './components/routing/navbar';
 import Home from './components/routing/home';
 import Dashboard from './components/routing/admin/dashboard';
-import Posts from './components/routing/posts'
+import Posts from './components/routing/posts';
+import ProductDetails from './components/routing/productDetails'
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
     <Navbar />
     <div className="content">
       <Switch>
-        <Route path="/products" component={Products} />
-        <Route path="/posts" component={Posts} />
+        <Route path="/products/:id" component={ProductDetails}/>
+        <Route path="/products" render={(props) => <Products sortBy="newest" {...props}/>} />
+        <Route path="/posts/:year?/:month?" component={Posts} />
         <Route path="/admin" component={Dashboard} />
         <Route path="/" component={Home} />
       </Switch>
