@@ -3,6 +3,8 @@ import { getMovies, deleteMovie } from "../../services/fakeMovieService";
 import FilterTable from "../common/filterTable";
 import Pagination from "../common/pagination";
 import Table from "../common/table";
+import { paginate } from "../../utils/paginate";
+import _ from 'lodash'
 
 class HomeVid extends Component {
   state = {
@@ -10,8 +12,7 @@ class HomeVid extends Component {
     filteredMovie: getMovies(),
     pageSize: 4,
     filterBy: 'allgenre',
-    isSorted: false,
-    sortBy: null,
+    sortColumn: { path: "title", order: "asc" },
     currentPage:  1
   };
   handleDelete = id => {
@@ -45,47 +46,18 @@ class HomeVid extends Component {
     || val.numberInStock.toString().toLowerCase().includes(value))
     this.setState({filteredMovie: movies})
   }
-  handleSort = (value) => {
-    const movies = this.state.filteredMovie;
-    movies.sort(function (a, b) {
-      let ax = a[value];
-      let bx = b[value]
-      if (value === 'genre') {
-        ax = a[value]['name'];
-        bx = b[value]['name']
-      }
-      if (ax > bx) {
-        return -1;
-      } if (ax < bx) {
-        return 1;
-      }
-      return 0;
-    })
-    this.setState({ filteredMovie: movies, isSorted: true, sortBy: value })
+  handleSort = sortColumn =>  this.setState({ sortColumn })
 
-
-  }
-  handleDecSort = (value) => {
-    const movies = this.state.filteredMovie;
-    movies.sort(function (a, b) {
-      let ax = a[value];
-      let bx = b[value]
-      if (value === 'genre') {
-        ax = a[value]['name'];
-        bx = b[value]['name']
-      }
-      if (ax > bx) {
-        return 1;
-      } if (ax < bx) {
-        return -1;
-      }
-      return 0;
-    })
-    this.setState({ filteredMovie: movies, isSorted: false, sortBy: value })
-  }
   render() {
-    const count = this.state.filteredMovie.length;
-    const {pageSize , currentPage} = this.state;
+    const { filteredMovie } = this.state;
+    const count = filteredMovie.length;
+    const {pageSize , currentPage, sortColumn} = this.state;
+    const sorted = _.orderBy(
+      filteredMovie,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
+    const filtered = paginate(sorted, currentPage, pageSize);
     return (
       <div className="container p-2">
         <div className="row">
@@ -101,9 +73,9 @@ class HomeVid extends Component {
             </div>
             <Table
               onSort={this.handleSort}
-              onDecSort={this.handleDecSort}
               onLike={this.handeleLike}
-              data={this.state}
+              filtered={filtered}
+              sortColumn={sortColumn}
               onDelete={this.handleDelete}
             />         
             <Pagination 

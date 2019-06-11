@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const LikeCount = ({onLike, liked, movie}) => {
     let classes = 'fas fa-heart';
