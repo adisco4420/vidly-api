@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Counter from "./counter";
-import Navbar from "./navbar";
+import CounterNavbar from "./navbar";
 
 class Counters extends Component {
   state = {
@@ -36,7 +36,7 @@ class Counters extends Component {
   render() {
     return (
       <React.Fragment>
-        <Navbar counterLength={this.state.counters.length} />
+        <CounterNavbar counterLength={this.state.counters.length} />
         <div className="container p-2">
           <button
             onClick={this.handleReset}

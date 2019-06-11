@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-const Navbar = ({counterLength}) => {
+const CounterNavbar = ({counterLength}) => {
     return ( 
         <React.Fragment>
         <nav className="navbar navbar-light bg-light">
@@ -10,4 +10,4 @@ const Navbar = ({counterLength}) => {
         );
 }
  
-export default Navbar;
+export default CounterNavbar;
