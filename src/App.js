@@ -1,32 +1,40 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import Products from './components/routing/products';
 // import Counter from './components/counter-app/counter';
-// import HomeVid from './components/vivdy/HomeVid';
+import HomeVid from './components/vivdy/HomeVid';
 import Navbar from './components/routing/navbar';
 import Home from './components/routing/home';
 import Dashboard from './components/routing/admin/dashboard';
 import Posts from './components/routing/posts';
 import ProductDetails from './components/routing/productDetails'
+import Customers from './components/vivdy/customers';
+import Rentals from './components/vivdy/rentals';
+import NotFound from './components/vivdy/not-found';
+import MovieDetail from './components/vivdy/movie-detail';
 
 function App() {
   return (
     // <Counter />
     // <HomeVid />
-    <div>
+    <React.Fragment>
     <Navbar />
-    <div className="content">
+    <div className="container">
       <Switch>
-        <Route path="/products/:id" component={ProductDetails}/>
-        <Route path="/products" render={(props) => <Products sortBy="newest" {...props}/>} />
-        <Route path="/posts/:year?/:month?" component={Posts} />
-        <Route path="/admin" component={Dashboard} />
-        <Route path="/" component={Home} />
-      </Switch>
+        <Route path="/movies/:id" component={MovieDetail}/>
+        <Route path="/movies" component={HomeVid}/>
+        <Route path="/customers" component={Customers} />
+        <Route path="/rentals" component={Rentals} />
+        <Route path="/not-found" component={NotFound} />
+
+        <Redirect from="/" exact to="/movies" />
+        <Redirect  to="/not-found" />
+
+      </Switch> 
     
     </div>
-    </div>
+    </React.Fragment>
   );
 }
 
