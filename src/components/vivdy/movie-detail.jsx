@@ -1,25 +1,32 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import { getMovie } from '../../services/fakeMovieService';
+import Form from '../common/form';
 
-const MovieDetail = ({match, history}) => {
-    const movie = getMovie(match.params.id);
-    if(!movie) {
-        history.push('/not-found');
-        return null; 
+class MovieDetail extends Form {
+    state = {  }
+  
+    movie = getMovie(this.props.match.params.id);
+    render() { 
+            if(!this.movie) {
+                this.props.history.replace('/not-found');
+                return null; 
+            }
+        return ( <div>
+            <h4>Title: {this.movie.title}</h4>
+            <h4>Genre: {this.movie.genre.name}</h4>
+            <h4>Stock: {this.movie.numberInStock}</h4>
+            <h4>Rate: {this.movie.dailyRentalRate}</h4>
+            <div>
+                <button onClick={() => this.props.history.push('/movies')} className="btn btn-primary">Go Back</button>
+                <button onClick={() => this.props.history.push(`/movies/new?id=${this.movie._id}`)} className="btn btn-info ml-2">Edit</button>
+            </div>
+    
+    
+    
+        </div> );
+      
     }
-    return ( <div>
-        <h4>Title: {movie.title}</h4>
-        <h4>Genre: {movie.genre.name}</h4>
-        <h4>Stock: {movie.numberInStock}</h4>
-        <h4>Rate: {movie.dailyRentalRate}</h4>
-        <div>
-            <button onClick={() => history.push('/movies')} className="btn btn-primary">Save</button>
-        </div>
-
-
-
-    </div> );
 }
  
 export default MovieDetail;

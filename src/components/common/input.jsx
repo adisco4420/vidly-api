@@ -10,6 +10,7 @@ const InputField = ({meta, onChangeField, error}) => {
       onChange={onChangeField}
       className="form-control"
       id={meta.name}
+      value={meta.value || ''}
       placeholder={`Enter ${meta.label}`}
     />
     {error && <div className="alert alert-danger">{error}</div>}

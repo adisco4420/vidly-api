@@ -39,18 +39,18 @@ class Form extends Component {
     
           this.doSubmit();
       }
-      renderInput = (name, type = 'text', label) => {
+      renderInput = (name, type = 'text', label, value) => {
         const { errors } = this.state;
         return (
             <InputField onChangeField={this.handleChange} error={errors[name]} 
-            meta={{name: [name], label: [label || name], type: [type]}} />
+            meta={{name: [name], label: [label || name], value, type: [type]}} />
         );
       }
-      renderSelect = (name,  label, options) => {
+      renderSelect = (name,  label, options, value) => {
         const { errors } = this.state;
         return (
             <SelectField onChangeField={this.handleChange} error={errors[name]} 
-            meta={{name: [name], label: [label || name], options: options}} />
+            meta={{name: [name], label: [label || name], value,  options: options}} />
         );
       }
       renderButton = (label) => {

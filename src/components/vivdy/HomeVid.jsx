@@ -14,6 +14,7 @@ class HomeVid extends Component {
     filteredMovie: getMovies(),
     pageSize: 4,
     filterBy: 'allgenre',
+    searchBy: '',
     sortColumn: { path: "title", order: "asc" },
     currentPage:  1
   };
@@ -38,7 +39,7 @@ class HomeVid extends Component {
     } else {
       movies = this.state.allMovies.filter(movie => movie.genre.name === genre);
     }
-    this.setState({ filteredMovie: movies, filterBy: genre });
+    this.setState({ filteredMovie: movies, filterBy: genre , searchBy: ''});
   };
   handleSearch = e => {
     let { value } = e.target;
@@ -46,12 +47,12 @@ class HomeVid extends Component {
     const movies = this.state.allMovies.filter(val => val.title.toLowerCase().includes(value) || 
     val.genre.name.toLowerCase().includes(value) || val.dailyRentalRate.toString().toLowerCase().includes(value)
     || val.numberInStock.toString().toLowerCase().includes(value))
-    this.setState({filteredMovie: movies})
+    this.setState({filteredMovie: movies, filterBy: 'allgenre', searchBy: value})
   }
   handleSort = sortColumn =>  this.setState({ sortColumn })
 
   render() {
-    const { filteredMovie } = this.state;
+    const { filteredMovie, searchBy } = this.state;
     const count = filteredMovie.length;
     const {pageSize , currentPage, sortColumn} = this.state;
     const sorted = _.orderBy(
@@ -73,7 +74,7 @@ class HomeVid extends Component {
               </div>
               <div className="col-md-6"> <p>Showing {count} movies in the database</p></div>
               <div className="col-md-6 float-right">
-                <input type="search" onChange={this.handleSearch} className="form-control" placeholder="search"/>
+                <input value={searchBy} type="search" onChange={this.handleSearch} className="form-control" placeholder="search"/>
               </div>
             </div>
             <Table
