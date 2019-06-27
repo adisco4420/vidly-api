@@ -13,6 +13,7 @@ import Customers from './components/vivdy/customers';
 import Rentals from './components/vivdy/rentals';
 import NotFound from './components/vivdy/not-found';
 import MovieDetail from './components/vivdy/movie-detail';
+import AuthRoute from './components/auth/auth-route';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
     <Navbar />
     <div className="container">
       <Switch>
+        <Route path="/auth" render={(props) => <AuthRoute {...props} />}/>
         <Route path="/movies/:id" component={MovieDetail}/>
         <Route path="/movies" component={HomeVid}/>
         <Route path="/customers" component={Customers} />

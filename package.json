@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "4.1.0",
+    "joi-browser": "13.4",
     "lodash": "^4.17.11",
     "query-string": "^6.7.0",
     "react": "^16.8.6",

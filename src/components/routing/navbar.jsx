@@ -9,7 +9,7 @@ const NavBar = () => {
     <span className="navbar-toggler-icon"></span>
   </button>
   <div className="collapse navbar-collapse" id="navbarNav">
-    <ul className="navbar-nav">
+    <ul className="navbar-nav mr-auto">
       <li className="nav-item">
         <NavLink className="nav-link" to="/movies">Movies <span className="sr-only">(current)</span></NavLink>
       </li>
@@ -19,7 +19,14 @@ const NavBar = () => {
       <li className="nav-item">
         <NavLink className="nav-link" to="/rentals">Rentals</NavLink>
       </li>
- 
+    </ul>
+    <ul className="navbar-nav ">
+      <li className="nav-item">
+      <NavLink className="nav-link" to="/auth/login">Login</NavLink>        
+      </li>
+      <li className="nav-item">
+      <NavLink className="nav-link btn btn-primary text-light" to="/auth/register">Register</NavLink>        
+      </li>
     </ul>
   </div>
 </nav>

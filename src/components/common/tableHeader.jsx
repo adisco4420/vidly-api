@@ -26,7 +26,7 @@ class TableHeader extends Component {
               {columns.map((column, index) => (
                 <React.Fragment key={index}>
                   {
-                    column.content ? <td key={index}/> : 
+                    column.key ? <td key={index}/> : 
                     <th
                     key={index}
                     onClick={() => {this.raiseSort(column.value)}}
