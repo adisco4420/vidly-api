@@ -6,6 +6,8 @@ import Table from "../common/table";
 import { paginate } from "../../utils/paginate";
 import _ from 'lodash'
 
+import { Link } from 'react-router-dom';
+
 class HomeVid extends Component {
   state = {
     allMovies: getMovies(),
@@ -66,6 +68,9 @@ class HomeVid extends Component {
           </div>
           <div className="col-md-8">
             <div className="row m-3">
+              <div className="col-md-12 mb-2">
+                <Link to="/movies/new" className="btn btn-primary">New Movie</Link>
+              </div>
               <div className="col-md-6"> <p>Showing {count} movies in the database</p></div>
               <div className="col-md-6 float-right">
                 <input type="search" onChange={this.handleSearch} className="form-control" placeholder="search"/>

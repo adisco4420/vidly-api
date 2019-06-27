@@ -14,6 +14,7 @@ import Rentals from './components/vivdy/rentals';
 import NotFound from './components/vivdy/not-found';
 import MovieDetail from './components/vivdy/movie-detail';
 import AuthRoute from './components/auth/auth-route';
+import NewMovie from './components/vivdy/new-movie';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
     <div className="container">
       <Switch>
         <Route path="/auth" render={(props) => <AuthRoute {...props} />}/>
+        <Route path="/movies/new" component={NewMovie}/>
         <Route path="/movies/:id" component={MovieDetail}/>
         <Route path="/movies" component={HomeVid}/>
         <Route path="/customers" component={Customers} />

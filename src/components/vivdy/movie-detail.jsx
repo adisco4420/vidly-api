@@ -4,7 +4,10 @@ import { getMovie } from '../../services/fakeMovieService';
 
 const MovieDetail = ({match, history}) => {
     const movie = getMovie(match.params.id);
-    console.log(movie);
+    if(!movie) {
+        history.push('/not-found');
+        return null; 
+    }
     return ( <div>
         <h4>Title: {movie.title}</h4>
         <h4>Genre: {movie.genre.name}</h4>

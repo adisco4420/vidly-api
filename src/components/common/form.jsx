@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import Joi from 'joi-browser';
 import InputField from './input';
+import SelectField from './select';
 
 class Form extends Component {
-    state = {
-        data: {email: '', password: ''},
-        errors: {}
-    };
     validate = () => {
       const result = Joi.validate(this.state.data, this.schema, {abortEarly: false})
       if(!result.error) return null;
@@ -36,16 +33,24 @@ class Form extends Component {
     handleSubmit = e => {
         e.preventDefault();
           const errors = this.validate();
+
           this.setState({errors : errors ||  {}});
           if(errors) return null;
     
           this.doSubmit();
       }
-      renderInput = (name, type = 'text') => {
+      renderInput = (name, type = 'text', label) => {
         const { errors } = this.state;
         return (
             <InputField onChangeField={this.handleChange} error={errors[name]} 
-            meta={{name: [name], label: [name], type: [type]}} />
+            meta={{name: [name], label: [label || name], type: [type]}} />
+        );
+      }
+      renderSelect = (name,  label, options) => {
+        const { errors } = this.state;
+        return (
+            <SelectField onChangeField={this.handleChange} error={errors[name]} 
+            meta={{name: [name], label: [label || name], options: options}} />
         );
       }
       renderButton = (label) => {
