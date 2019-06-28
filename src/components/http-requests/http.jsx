@@ -1,20 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-
-axios.interceptors.response.use(null, error => {
-    const { status } = error.response;
-    switch (status) {
-        case 404:
-            // console.log('error');
-            // return Promise.reject('neddn');
-            return Promise.reject('bad input')
-        case 401: 
-            return Promise.reject('unauthorized ')
-        default:
-            return Promise.reject('sorry error occured')
-    }
-})
-
+import http from './service';
 const API = 'https://jsonplaceholder.typicode.com/posts';
 
 class HttpRequest extends Component {
@@ -22,12 +7,14 @@ class HttpRequest extends Component {
         data : null,
         showAddInput: false
     }
-     componentDidMount() {
+    async componentDidMount() {
          this.getPosts();
+         const data = await http.getPosts(API);
+         console.log(data);
     }
     getPosts = async ()  => {
         try {
-            const res = await axios.get(API);
+            const res = await http.get(API);
             this.setState({data: res.data.splice(0,20)})
         } catch (error) {
             console.log(error);
@@ -35,7 +22,7 @@ class HttpRequest extends Component {
     }
     handleDelete = async (id) => {
         try {
-          const {data: posts } =  await axios.delete(`${API}/${880}/kk`);
+          const {data: posts } =  await http.delete(`gg${API}/${880}/kk`);
             // throw error;s
             const data = [...this.state.data];
             const newData = data.filter(item => item.id !== id);
@@ -49,7 +36,7 @@ class HttpRequest extends Component {
         const id = this.state.data.length++;
         const body = {title: 'tesunghhhfgh', body: 'jhdddddddddddhhdhdjldkldkdl'};
         try {
-            const res = await axios.post(API, body);
+            const res = await http.post(API, body);
             console.log(res.data);
             const data = this.state.data;
             // this.setState({data})
