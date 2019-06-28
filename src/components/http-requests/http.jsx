@@ -5,7 +5,8 @@ const API = 'https://jsonplaceholder.typicode.com/posts';
 
 class HttpRequest extends Component {
     state = {
-        data : null
+        data : null,
+        showAddInput: false
     }
      componentDidMount() {
          this.getPosts();
@@ -28,12 +29,25 @@ class HttpRequest extends Component {
             console.log(error);
         }
     }
+    createPost = async () => {
+        const id = this.state.data.length++;
+        const body = {title: 'tesunghhhfgh', body: 'jhdddddddddddhhdhdjldkldkdl'};
+        try {
+            const res = await axios.post(API, body);
+            console.log(res.data);
+            const data = this.state.data;
+            // this.setState({data})
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     state = {  }
     render() { 
         const { data } = this.state;
         return (<div className="row">
             <div className="col-12 mb-2">
-                <button className="btn btn-primary">Add</button>
+                <button onClick={() => this.createPost()} className="btn btn-primary">Add</button>
             </div>
             <div className="col-12">
                 <Table data={data} onDelete={this.handleDelete} />
