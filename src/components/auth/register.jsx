@@ -19,14 +19,15 @@ class Register extends Form {
     }
   
     render() {
+      const { data } = this.state;
       return (
         <React.Fragment>
           <header><h2>Register</h2></header>
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
-              {this.renderInput('name')}
-              {this.renderInput('email')}
-              {this.renderInput('password', 'password')}
+              {this.renderInput('name', null, null, data.name)}
+              {this.renderInput('email', 'email', null, data.email)}
+              {this.renderInput('password', 'password', null, data.password)}
             </div>
               {this.renderButton('Login')}
           </form>
