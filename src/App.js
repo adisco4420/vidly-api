@@ -15,6 +15,7 @@ import NotFound from './components/vivdy/not-found';
 import MovieDetail from './components/vivdy/movie-detail';
 import AuthRoute from './components/auth/auth-route';
 import NewMovie from './components/vivdy/new-movie';
+import HttpRequest from './components/http-requests/http';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
     <Navbar />
     <div className="container">
       <Switch>
+        <Route path="/http-requests" component={HttpRequest}/>
         <Route path="/auth" render={(props) => <AuthRoute {...props} />}/>
         <Route path="/movies/new" component={NewMovie}/>
         <Route path="/movies/:id" component={MovieDetail}/>
