@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+axios.interceptors.response.use(null, error => {
+    const { status } = error.response;
+    switch (status) {
+        case 404:
+            // console.log('error');
+            // return Promise.reject('neddn');
+            return Promise.reject('bad input')
+        case 401: 
+            return Promise.reject('unauthorized ')
+        default:
+            return Promise.reject('sorry error occured')
+    }
+})
+
 const API = 'https://jsonplaceholder.typicode.com/posts';
 
 class HttpRequest extends Component {
@@ -21,9 +35,11 @@ class HttpRequest extends Component {
     }
     handleDelete = async (id) => {
         try {
-            await axios.delete(`${API}/${id}`);
+          const {data: posts } =  await axios.delete(`${API}/${880}/kk`);
+            // throw error;s
             const data = [...this.state.data];
-            const newData = data.filter(item => item.id !== id)
+            const newData = data.filter(item => item.id !== id);
+            console.log(posts);
             this.setState({data: newData})
         } catch (error) {
             console.log(error);
@@ -60,7 +76,6 @@ export default HttpRequest;
 
 
 const Table = ({data, onDelete}) => {
-    console.log(data);
     return ( 
     <React.Fragment>
     {!data && <h6>Loading...</h6>}
