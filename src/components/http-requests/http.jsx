@@ -18,6 +18,16 @@ class HttpRequest extends Component {
             console.log(error);
         }
     }
+    handleDelete = async (id) => {
+        try {
+            await axios.delete(`${API}/${id}`);
+            const data = [...this.state.data];
+            const newData = data.filter(item => item.id !== id)
+            this.setState({data: newData})
+        } catch (error) {
+            console.log(error);
+        }
+    }
     state = {  }
     render() { 
         const { data } = this.state;
@@ -26,7 +36,7 @@ class HttpRequest extends Component {
                 <button className="btn btn-primary">Add</button>
             </div>
             <div className="col-12">
-                <Table data={data} />
+                <Table data={data} onDelete={this.handleDelete} />
             </div>
         </div> );
     }
@@ -35,12 +45,13 @@ class HttpRequest extends Component {
 export default HttpRequest;
 
 
-const Table = ({data}) => {
+const Table = ({data, onDelete}) => {
     console.log(data);
     return ( 
     <React.Fragment>
     {!data && <h6>Loading...</h6>}
     {data && <table className="table">
+        <thead><tr><td colSpan="12">Total Number of Post {data.length}</td></tr></thead>
         <thead>
             <tr>
                 <th>Title</th>
@@ -54,7 +65,7 @@ const Table = ({data}) => {
                 <tr key={i}>
                 <td>{item.title}</td>
                 <td>{item.body}</td>
-                <td><button className="btn btn-danger btn-sm">delete</button></td>
+                <td><button onClick={() => onDelete(item.id)} className="btn btn-danger btn-sm">delete</button></td>
             </tr>
             ) )
             
