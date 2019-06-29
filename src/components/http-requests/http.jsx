@@ -22,7 +22,7 @@ class HttpRequest extends Component {
     }
     handleDelete = async (id) => {
         try {
-          const {data: posts } =  await http.delete(`gg${API}/${880}/kk`);
+          const {data: posts } =  await http.delete(`${API}/${880}/kk`);
             // throw error;s
             const data = [...this.state.data];
             const newData = data.filter(item => item.id !== id);
