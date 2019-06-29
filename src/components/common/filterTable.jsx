@@ -1,19 +1,21 @@
 import React from "react";
 const allGenres = ["Action", "Comedy", "Thriller"];
 
-const FilterTable = ({ onFilter, filterBy }) => {
+const FilterTable = ({ onFilter, filterBy, allGenres: genre }) => {
   return (
     <ul className="list-group">
-      <li onClick={() => onFilter("allgenre")}  className={`list-group-item ${filterBy === 'allgenre' ? "active" : ""}`}>
+      {!genre && <li>loading...</li>}
+      {genre && <li onClick={() => onFilter("allgenre")}  className={`list-group-item ${filterBy === 'allgenre' ? "active" : ""}`}>
         All Genres
-      </li>
-      {allGenres.map((genre, index) => (
-        <li
+      </li>}
+      {genre && genre.map((genre, index) => (
+       
+       <li
           key={index}
-          onClick={() => onFilter(genre)}
-          className={`list-group-item ${filterBy === genre ? "active" : ""}`}
+          onClick={() => onFilter(genre._id)}
+          className={`list-group-item ${filterBy === genre._id ? "active" : ""}`}
         >
-          {genre}
+          {genre.name}
         </li>
       ))}
     </ul>

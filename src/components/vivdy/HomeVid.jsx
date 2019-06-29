@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { getMovies, deleteMovie } from "../../services/fakeMovieService";
+// import { getMovies, deleteMovie } from "../../services/fakeMovieService";
+import { allGenres, allMovies, deleteMovie } from '../../services/vivdly-backend';
 import FilterTable from "../common/filterTable";
 import Pagination from "../common/pagination";
 import Table from "../common/table";
@@ -8,19 +9,32 @@ import _ from 'lodash'
 
 import { Link } from 'react-router-dom';
 
-class HomeVid extends Component {
+class HomeVid extends Component {  
   state = {
-    allMovies: getMovies(),
-    filteredMovie: getMovies(),
+    allMovies: [],
+    filteredMovie: [],
     pageSize: 4,
     filterBy: 'allgenre',
     searchBy: '',
     sortColumn: { path: "title", order: "asc" },
-    currentPage:  1
+    currentPage:  1,
+    genres: null
   };
-  handleDelete = id => {
-    deleteMovie(id);
-    this.setState({ filteredMovie: getMovies() });
+  getGenres = async () => {
+    const genres = await allGenres();
+    this.setState({genres})
+  }
+  getMovie = async () => {
+    const movies = await allMovies();
+    this.setState({allMovies: movies, filteredMovie: movies})
+  }
+  componentDidMount() {
+    this.getGenres();
+    this.getMovie();
+  }
+  handleDelete = async id => {
+    await deleteMovie(id)
+    this.getMovie();
   };
   handeleLike = movie => {
     let index = this.state.allMovies.findIndex(val => val._id === movie._id);
@@ -37,7 +51,7 @@ class HomeVid extends Component {
     if (genre === "allgenre") {
       movies = this.state.allMovies
     } else {
-      movies = this.state.allMovies.filter(movie => movie.genre.name === genre);
+      movies = this.state.allMovies.filter(movie => movie.genre._id === genre);      
     }
     this.setState({ filteredMovie: movies, filterBy: genre , searchBy: ''});
   };
@@ -52,7 +66,7 @@ class HomeVid extends Component {
   handleSort = sortColumn =>  this.setState({ sortColumn })
 
   render() {
-    const { filteredMovie, searchBy } = this.state;
+    const { filteredMovie, searchBy, genres } = this.state;
     const count = filteredMovie.length;
     const {pageSize , currentPage, sortColumn} = this.state;
     const sorted = _.orderBy(
@@ -65,7 +79,7 @@ class HomeVid extends Component {
       <div className="container p-2">
         <div className="row">
           <div className="col-md-4">
-            <FilterTable filterBy={this.state.filterBy} onFilter={this.handleFilter} />
+            <FilterTable allGenres={genres} filterBy={this.state.filterBy} onFilter={this.handleFilter} />
           </div>
           <div className="col-md-8">
             <div className="row m-3">
