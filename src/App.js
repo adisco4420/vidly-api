@@ -17,11 +17,14 @@ import AuthRoute from './components/auth/auth-route';
 import NewMovie from './components/vivdy/new-movie';
 import HttpRequest from './components/http-requests/http';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     // <Counter />
     // <HomeVid />
     <React.Fragment>
+    <ToastContainer />
     <Navbar />
     <div className="container">
       <Switch>

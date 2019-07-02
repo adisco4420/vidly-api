@@ -5,7 +5,10 @@ import FilterTable from "../common/filterTable";
 import Pagination from "../common/pagination";
 import Table from "../common/table";
 import { paginate } from "../../utils/paginate";
-import _ from 'lodash'
+import _ from 'lodash';
+import { toast } from 'react-toastify';
+
+
 
 import { Link } from 'react-router-dom';
 
@@ -33,10 +36,15 @@ class HomeVid extends Component {
     this.getMovie();
   }
   handleDelete = async id => {
-    await deleteMovie(id)
+    try {
+      await deleteMovie(id)
+    } catch (error) {
+      toast.error(error.message);        
+    }
     this.getMovie();
   };
   handeleLike = movie => {
+    toast.success(movie.title + ' liked');
     let index = this.state.allMovies.findIndex(val => val._id === movie._id);
     const updatedMovie = { ...movie, liked: !movie.liked };
     const movies = this.state.allMovies;
