@@ -13,3 +13,13 @@ export const allMovies = async () => {
 export const deleteMovie =  (id) => {
     return http.delete(api + '/movies/' + id);
 }
+export const getMovie = (id) => {
+    return http.get(api + '/movies/' + id);
+} 
+export const saveOrUpdateMovie = (movie, id) => {
+    if (id) {
+        return http.put(api + '/movies/' + id, movie);        
+    }else {
+        return http.post(api + '/movies', movie);
+    }
+}
