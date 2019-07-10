@@ -1,7 +1,9 @@
-import React, { Component } from "react";
-import InputField from "../common/input";
+import React from "react";
 import Form from "../common/form";
 import Joi from 'joi-browser';
+import { loginSrv } from '../../services/auth';
+import { toast } from 'react-toastify';
+
 
 
 class Login extends Form {
@@ -13,9 +15,19 @@ class Login extends Form {
       email: Joi.string().required().email(),
       password: Joi.string().required()
   }
+  storeToken(token) { localStorage['currentUser'] = token}
+  async login() {
+    try {
+      const {data: token} = await loginSrv(this.state.data);
+      this.storeToken(token);
+      this.props.history.push('/')
+      toast.success('login successful')
+    } catch (error) {
+      toast.error(error.message)      
+    }
+  }
   doSubmit = () => {
-    //server call
-    console.log('submitted');
+   this.login()
     
   }
 
