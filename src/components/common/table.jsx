@@ -3,6 +3,14 @@ import LikeCount from "./Likes";
 import TableHeader from "./tableHeader";
 import TableBody from "./tableBody";
 import { Link } from "react-router-dom";
+import { getCurrentUser } from '../../services/auth';
+
+
+const adminAction = () => {
+  if (getCurrentUser() && getCurrentUser().isAdmin) return 'd-block';
+  return 'd-none'
+}
+
 const Table = props => {
   const { onDelete, onLike, onSort, filtered, sortColumn } = props;
 
@@ -24,9 +32,8 @@ const Table = props => {
     {
       key: "delete",
       content: movie => (
-        <button
+        <button className={`${adminAction()} btn btn-danger btn-sm` }
           onClick={() => onDelete(movie._id)}
-          className="btn btn-danger btn-sm"
         >
           Delete
         </button>

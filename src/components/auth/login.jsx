@@ -20,7 +20,8 @@ class Login extends Form {
     try {
       const {data: token} = await loginSrv(this.state.data);
       this.storeToken(token);
-      this.props.history.push('/')
+      const { state } = this.props.location;
+      window.location = state ? state.from.pathname : '/'
       toast.success('login successful')
     } catch (error) {
       toast.error(error.message)      

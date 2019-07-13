@@ -10,7 +10,7 @@ class HttpRequest extends Component {
     async componentDidMount() {
          this.getPosts();
          const data = await http.getPosts(API);
-         console.log(data);
+        //  console.log(data);
     }
     getPosts = async ()  => {
         try {

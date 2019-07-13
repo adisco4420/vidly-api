@@ -19,21 +19,19 @@ class Register extends Form {
       localStorage['currentUser'] = token
       toast.success(msg || 'success')
       setTimeout(() => {
-        this.props.history.push('/');
+      window.location = '/';
       }, 2000);
     }
      register = async () =>{
       try {
         const {headers} = await register(this.state.data)
         const authHeader = headers['x-auth-token'];
-        console.log(authHeader);
         this.goHome('register successful', authHeader)   
         // console.log(res.d);
       } catch (error) {
         if (error.status === 400) {
           const errors = {...this.state.errors};
           errors.email = error.message;
-          console.log(errors);
           this.setState({errors})
         } else {
         toast.error(error.message);        
